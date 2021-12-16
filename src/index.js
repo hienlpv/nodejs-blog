@@ -3,11 +3,15 @@ import morgan from "morgan";
 import { engine } from "express-handlebars";
 
 import { route } from "./routes/index.js";
+import { connectDB } from "./config/db/index.js";
 
 const app = express();
 
 // constant
 const PORT = 3000;
+
+// connect database
+connectDB();
 
 // config temple engine
 app.engine(
