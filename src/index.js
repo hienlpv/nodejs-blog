@@ -1,6 +1,10 @@
 import express from "express";
 import morgan from "morgan";
 import { engine } from "express-handlebars";
+import methodOverride from "method-override";
+
+import SortMiddleware from "./app/middleware/SortMiddleware.js";
+import { sum, sortable } from "./helper/handlebar.js";
 
 import { route } from "./routes/index.js";
 import { connectDB } from "./config/db/index.js";
@@ -18,6 +22,10 @@ app.engine(
   "hbs",
   engine({
     extname: ".hbs",
+    helpers: {
+      sum,
+      sortable,
+    },
   })
 );
 app.set("view engine", "hbs");
@@ -32,6 +40,10 @@ app.use(
   })
 );
 app.use(express.json());
+app.use(methodOverride("_method"));
+
+// custom middleware
+app.use(SortMiddleware);
 
 // route
 route(app);
